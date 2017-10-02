@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="time_spinner">
+        <item>Groupe TD1 TP1</item>
+        <item>Groupe TD1 TP2</item>
+        <item>Groupe TD2 TP3</item>
+        <item>Groupe TD2 TP4</item>
+    </string-array>
+
+    <string name="arrow_current">Actuelle</string>
+    <string name="arrow_text">Selection de la semaine :</string>
+    <string name="connexionFail">Aucune connexion !\nAucune sauvegarde enregistrée !</string>
+    <string name="day1">Lun.</string>
+    <string name="day2">Mar.</string>
+    <string name="day3">Mer.</string>
+    <string name="day4">Jeu.</string>
+    <string name="day5">Ven.</string>
+    <string name="day6">Sam.</string>
+    <string name="day7">Dim.</string>
+    <string name="downloading">Téléchargement…</string>
+    <string name="fatalFailMessage" formatted="false"><![CDATA[Une erreur inconnue à fait planté %s !<br/>
+        Si l\'erreur empêche le démarrage, essayez d\'effacer les préférences.<br/>
+        StackTrace de l\'erreur :<br/>
+        <br/>
+        <small><small>%s</small></small>]]>
+    </string><string name="fatalFailTitle">Erreur fatale</string>
+    <string name="neutralErrorDialogAction">OK</string>
+    <string name="positiveErrorDialogAction">EFFACER LES PREFERENCES</string>
+    <string name="time_text">Emploi du temps :</string>
+    <string name="update">Actualisation…</string>
+</resources>

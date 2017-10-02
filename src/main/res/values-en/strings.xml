@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="time_spinner">
+        <item>Group TD1 TP1</item>
+        <item>Group TD1 TP2</item>
+        <item>Group TD2 TP3</item>
+        <item>Group TD2 TP4</item>
+    </string-array>
+
+    <string name="arrow_current">Current</string>
+    <string name="arrow_text">Week selection:</string>
+    <string name="connexionFail">No connection!\nNo offline save!</string>
+    <string name="day1">Mon.</string>
+    <string name="day2">Tue.</string>
+    <string name="day3">Wed.</string>
+    <string name="day4">Thu.</string>
+    <string name="day5">Fri.</string>
+    <string name="day6">Sat.</string>
+    <string name="day7">Sun.</string>
+    <string name="downloading">Downloading…</string>
+    <string name="fatalFailMessage" formatted="false"><![CDATA[%s crashed because of an unknow error!<br/>
+        If the error prevent the application from starting, try to erase preferences.<br/>
+        Error StackTrace:<br/>
+        <br/>
+        <small><small>%s</small></small>]]></string>
+    <string name="fatalFailTitle">Fatal error</string>
+    <string name="neutralErrorDialogAction">OK</string>
+    <string name="positiveErrorDialogAction">ERASE PREFERENCES</string>
+    <string name="time_text">Time table:</string>
+    <string name="update">Update…</string>
+</resources>
