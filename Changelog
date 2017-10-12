@@ -2,6 +2,7 @@ Changelog :
 
 Version en développement :
  - Tenter de changer de semaine pendant le téléchargement des données ne crash plus l'application.
+ - Correction d'un créneau horraire affichant 15h15 au lieu de 15h45.
 
 v 1.0.0 (code 1) :
  - Première version.
