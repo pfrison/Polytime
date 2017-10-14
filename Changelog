@@ -1,6 +1,7 @@
 Changelog :
 
 Version en développement :
+ - Version ciblé d'android augmenté à 8.0.0 (API 26).
  - Version minimale d'android supportée abaissée à 4.2 (API 17).
  - Correction du bug d'affichage des jours de la seamine (renomé le bug du calendrier quantique).
  - Tenter de changer de semaine pendant le téléchargement des données ne crash plus l'application.
