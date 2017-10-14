@@ -1,7 +1,7 @@
 Changelog :
 
 Version en développement :
- - Version ciblé d'android augmenté à 8.0.0 (API 26).
+ - Version ciblé d'android augmenté à 8.0 (API 26).
  - Version minimale d'android supportée abaissée à 4.2 (API 17).
  - Correction du bug lors du changement de langue + optimisation de l'affichage de l'emploi du temps.
  - Correction du bug d'affichage des jours de la semaine (renomé le bug du calendrier quantique).
