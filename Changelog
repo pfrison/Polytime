@@ -1,7 +1,7 @@
 Changelog :
 
 Version en développement :
- - Version minimale d'android supporté abaissé à 4.2 (API 17).
+ - Version minimale d'android supportée abaissée à 4.2 (API 17).
  - Correction du bug d'affichage des jours de la seamine (renomé le bug du calendrier quantique).
  - Tenter de changer de semaine pendant le téléchargement des données ne crash plus l'application.
  - Correction d'un créneau horraire affichant 15h15 au lieu de 15h45.
