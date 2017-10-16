@@ -15,7 +15,13 @@ public class StringWizard {
 	public static String getDayString(int weekNumber, int dayPosition) {
 		DateFormat sdf = DateFormat.getDateInstance();
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.WEEK_OF_YEAR, weekNumber);        
+		cal.set(Calendar.WEEK_OF_YEAR, weekNumber);
+
+        //On some devices, the set method don't update the weekNumber properly.
+        //Calling the get method just after the set method force the weekNumber to update (????)
+        //Don't ask me why or how... The observer effect in quantum mechanics is not my domain...
+        cal.get(Calendar.WEEK_OF_YEAR);
+
 		cal.set(Calendar.DAY_OF_WEEK, dayPosition + 2);
 		return sdf.format(cal.getTime());
 	}

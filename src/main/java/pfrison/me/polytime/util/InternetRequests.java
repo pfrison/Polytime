@@ -41,6 +41,8 @@ public class InternetRequests {
 		try {
 			URL url = new URL("http://dptima3.polytech-lille.net/" + StringWizard.getPageString(groupeTP));
 			connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(2000); //2 seconds timeout (max wait for a connection)
+            connection.setReadTimeout(4000); //4 seconds timeout (max wait to the end of the response)
 			connection.connect();
 		} catch (IOException e) {
 			//connection failed
@@ -54,6 +56,7 @@ public class InternetRequests {
 			while ((inputLine = in.readLine()) != null) data += inputLine + "\n";
 			in.close();
 		} catch (IOException e) {
+            //read failled
             return null;
 		}
 		//encode data to UTF
