@@ -22,5 +22,22 @@
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".android.WidgetHorizontal"
+            android:label="@string/widgetHorizontal" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_horizontal_info" />
+        </receiver>
+        <receiver android:name=".android.WidgetVertical"
+            android:label="@string/widgetVertical" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_vertical_info" />
+        </receiver>
     </application>
 </manifest>
