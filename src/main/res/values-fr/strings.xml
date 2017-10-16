@@ -28,4 +28,6 @@
     <string name="positiveErrorDialogAction">EFFACER LES PREFERENCES</string>
     <string name="time_text">Emploi du temps :</string>
     <string name="update">Actualisation…</string>
+    <string name="widgetHorizontal">Horizontal</string>
+    <string name="widgetVertical">Vertical</string>
 </resources>
