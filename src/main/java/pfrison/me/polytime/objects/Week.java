@@ -12,13 +12,13 @@ public class Week {
 	public Week(Day[] days, int week) {
 		if(days.length != 6) throw new IllegalArgumentException("days length should be 6.");
 		for(Day day : days) if(day == null) throw new IllegalArgumentException("All String in days should be not null");
-		
+
 		this.setWeek(week);
 		this.setDays(days);
-		
+
 		for(int i=0; i<days.length; i++) {
 			Day day = days[i];
-			
+
 			if(day.getDay() == null || day.getDay().equals("")) day.setDay(StringWizard.getDayString(week, i));
 		}
 	}

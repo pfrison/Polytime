@@ -5,15 +5,15 @@ public class Lesson {
 	private String room;
 	private String day;
 	private int hour = -1; //-1 if blank
-	
+
 	public Lesson() {}
 	public Lesson(String name, String room) {
 		this.setName(name);
 		this.setRoom(room);
 	}
 	public Lesson(String name, String room, String day, int hour) {
-		if(hour < 0 || hour > 3) throw new IllegalArgumentException("hour value should be between 0 and 3"); 
-		
+		if(hour < 0 || hour > 3) throw new IllegalArgumentException("hour value should be between 0 and 3");
+
 		this.setName(name);
 		this.setRoom(room);
 		this.setDay(day);
