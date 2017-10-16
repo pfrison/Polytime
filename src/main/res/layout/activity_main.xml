@@ -75,4 +75,7 @@
         android:id="@+id/sep2"
         android:layout_below="@id/arrowNextButton"
         android:background="@android:color/darker_gray"/>
+
+    <!-- the timetable goes here  programmatically  -->
+
 </RelativeLayout>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/widget_textdisplay"
+        android:text="@string/downloading"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:gravity="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/widget_linearlayout"
+        android:orientation="vertical"
+        android:visibility="invisible" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:background="@drawable/time_table_border"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:id="@+id/widget_hour1" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:background="@drawable/time_table_border"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:id="@+id/widget_hour2" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:background="@drawable/time_table_border"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:id="@+id/widget_hour3" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:background="@drawable/time_table_border"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:id="@+id/widget_hour4" />
+    </LinearLayout>
+</RelativeLayout>
