@@ -5,7 +5,7 @@
     <string name="arrow_next" translatable="false">&gt;&gt;</string> <!-- will look like : >> -->
     <string name="hour1" translatable="false">08h00\n10h00</string>
     <string name="hour2" translatable="false">10h15\n12h15</string>
-    <string name="hour3" translatable="false">13h45\n15h15</string>
+    <string name="hour3" translatable="false">13h45\n15h45</string>
     <string name="hour4" translatable="false">16h00\n18h00</string>
 
     <string-array name="time_spinner">
@@ -36,4 +36,7 @@
     <string name="positiveErrorDialogAction">ERASE PREFERENCES</string>
     <string name="time_text">Time table:</string>
     <string name="update">Update…</string>
+
+    <string name="widgetHorizontal">Horizontal</string>
+    <string name="widgetVertical">Vertical</string>
 </resources>
