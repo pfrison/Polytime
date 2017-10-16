@@ -28,4 +28,6 @@
     <string name="positiveErrorDialogAction">ERASE PREFERENCES</string>
     <string name="time_text">Time table:</string>
     <string name="update">Update…</string>
+    <string name="widgetHorizontal">Horizontal</string>
+    <string name="widgetVertical">Vertical</string>
 </resources>
