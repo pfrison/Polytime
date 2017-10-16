@@ -16,7 +16,7 @@ import android.widget.Spinner;
 import pfrison.me.polytime.R;
 import pfrison.me.polytime.objects.Week;
 import pfrison.me.polytime.util.DataWizard;
-import pfrison.me.polytime.util.TimeTableWizard;
+import pfrison.me.polytime.util.TimeTableWizardActivity;
 
 /**
  * This is the root activity. User will load this activity on app start.
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.apply();
 
                 //download time table
-                new DownloadWeekAsync().execute(position + 1);
+                new DownloadWeekAsync().execute();
             }
 
             @Override
@@ -67,9 +67,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //set to the previous week if exist
-                TimeTableWizard.minusLookedWeek();
+                TimeTableWizardActivity.minusLookedWeek();
                 //redraw table
-                TimeTableWizard.displayTable(getBaseContext());
+                TimeTableWizardActivity.displayTable(getBaseContext());
             }
         });
 
@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //set to the next closest week
-                TimeTableWizard.setDefaultLookedWeek();
+                TimeTableWizardActivity.setDefaultLookedWeek();
                 //redraw table
-                TimeTableWizard.displayTable(getBaseContext());
+                TimeTableWizardActivity.displayTable(getBaseContext());
             }
         });
 
@@ -95,14 +95,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //set to the next week if exist
-                TimeTableWizard.plusLookedWeek();
+                TimeTableWizardActivity.plusLookedWeek();
                 //redraw table
-                TimeTableWizard.displayTable(getBaseContext());
+                TimeTableWizardActivity.displayTable(getBaseContext());
             }
         });
 
         //generate the space to add the table or the loading/error text
-        TimeTableWizard.generateSpace(this);
+        TimeTableWizardActivity.generateSpace(this);
 
         //After the Activity creation, Android will jump to onCreateOptionsMenu(Menu)
     }
@@ -113,18 +113,30 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_activity_toolbar, menu);
         DLIcon = menu.findItem(R.id.dlicon);
 
-        //restore a save (if exist, else display a loading text) while downloading the table for the first time that the activity is opened
-        new DownloadWeekAsync().execute(PreferenceManager.getDefaultSharedPreferences(this).getInt("group", 0) + 1);
-
         return true;
+        //After the OptionMenu creation, Android will jump to onResume()
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //restore a save (if exist, else display a loading text) while downloading the table for the first time that the activity is opened
+        new DownloadWeekAsync().execute();
     }
 
     //used to download the table asynchronously while a save is restored.
-    class DownloadWeekAsync extends AsyncTask<Integer, Void, Week[]> {
+    class DownloadWeekAsync extends AsyncTask<Void, Void, Week[]> {
+        private int groupTP;
+
+        public DownloadWeekAsync(){
+            groupTP = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getInt("group", 0) + 1;
+        }
+
         @Override
-        protected Week[] doInBackground(Integer... groupeTP) {
+        protected Week[] doInBackground(Void... v) {
             //download
-            return DataWizard.getWeeks(groupeTP[0], getBaseContext(), PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
+            return DataWizard.getWeeks(groupTP, getBaseContext(), PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
         }
 
         @Override
@@ -132,22 +144,22 @@ public class MainActivity extends AppCompatActivity {
             super.onPreExecute();
             if(DLIcon != null) DLIcon.setIcon(R.drawable.ic_sync_white_24dp);
 
-            //save restore in wait of the updated data
+            //save restored in wait of the updated data
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-            TimeTableWizard.weeks = DataWizard.getSavedWeeks(pref.getInt("group", 0) + 1, pref);
+            TimeTableWizardActivity.weeks = DataWizard.getSavedWeeks(groupTP, pref);
             //restore save if we have one
-            if(TimeTableWizard.weeks != null) TimeTableWizard.displayTable(getBaseContext());
+            if(TimeTableWizardActivity.weeks != null) TimeTableWizardActivity.displayTable(getBaseContext());
             //tell the user that we downloading the table
-            else TimeTableWizard.displayText(getBaseContext(), getResources().getString(R.string.downloading));
+            else TimeTableWizardActivity.displayText(getBaseContext(), getResources().getString(R.string.downloading));
         }
 
         protected void onPostExecute(Week[] week) {
             if(week == null){
                 //connection fail
                 if(DLIcon != null) DLIcon.setIcon(R.drawable.ic_no_connexion_white_24dp);
-                if(TimeTableWizard.weeks == null){
+                if(TimeTableWizardActivity.weeks == null){
                     //no save
-                    TimeTableWizard.displayText(getBaseContext(), getResources().getString(R.string.connexionFail));
+                    TimeTableWizardActivity.displayText(getBaseContext(), getResources().getString(R.string.connexionFail));
                 }
                 return;
             }
@@ -156,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
             if(DLIcon != null) DLIcon.setIcon(android.R.color.transparent);
 
             //apply change in activity
-            TimeTableWizard.weeks = week;
-            TimeTableWizard.displayTable(getBaseContext());
+            TimeTableWizardActivity.weeks = week;
+            TimeTableWizardActivity.displayTable(getBaseContext());
         }
     }
 }
