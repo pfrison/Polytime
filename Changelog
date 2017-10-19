@@ -1,5 +1,8 @@
 Changelog :
 
+v 1.1.1 (code 3) :
+ - Correction expresse d'un bug causant un crash pour les emploi du temps TP3 et TP4.
+
 v 1.1.0 (code 2) :
  - Ajout des widgets pour les écrans d'accueil. Peut être orienté horizontalement ou verticalement.
  - Ajout d'un timeout pour les téléchargements.
