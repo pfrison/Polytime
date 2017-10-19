@@ -3,6 +3,8 @@ package pfrison.me.polytime.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+
 import pfrison.me.polytime.objects.Day;
 import pfrison.me.polytime.objects.Lesson;
 import pfrison.me.polytime.objects.Week;
@@ -159,28 +161,33 @@ public class DataWizard {
 
         //extract and organize info contained in data
         String[] weekStrs = cropWeek(cropTable(data));
-        Week[] weeks = new Week[weekStrs.length];
-        for(int i=0; i<weeks.length; i++) {
-            String weekStr = weekStrs[i];
-            weeks[i] = new Week();
+        ArrayList<Week> weeks = new ArrayList<>();
+        for (String weekStr : weekStrs) {
+            //if no week number is present -> somehow the timetable is bugged, ignore this week
+            if (weekStr.contains("<A name=S")) {
+                Week week = new Week();
 
-            //week number
-            String wnstr = weekStr.substring(weekStr.indexOf("<A name=S") + "<A name=S".length(), weekStr.indexOf(">S"));
-            weeks[i].setWeek(Integer.parseInt(wnstr));
+                //week number
+                String wnstr = weekStr.substring(weekStr.indexOf("<A name=S") + "<A name=S".length(), weekStr.indexOf(">S"));
+                week.setWeek(Integer.parseInt(wnstr));
 
-            //days
-            Day[] days = new Day[Week.NUMBER_DAYS];
-            for(int j=0; j<days.length; j++) {
-                //day string
-                String str = StringWizard.getDayString(weeks[i].getWeek(), j);
-                days[j] = new Day(str);
+                //days
+                Day[] days = new Day[Week.NUMBER_DAYS];
+                for(int j=0; j<days.length; j++) {
+                    //day string
+                    String str = StringWizard.getDayString(week.getWeek(), j);
+                    days[j] = new Day(str);
 
-                //lessons
-                days[j].setLessons(cropLesson(cropDay(weekStr)[j + 1]));
+                    //lessons
+                    days[j].setLessons(cropLesson(cropDay(weekStr)[j + 1]));
+                }
+                week.setDays(days);
+
+                weeks.add(week);
             }
-            weeks[i].setDays(days);
         }
-        return weeks;
+        //transform ArrayList in primitive array and send it
+        return weeks.toArray(new Week[weeks.size()]);
     }
 
     /**
@@ -194,27 +201,32 @@ public class DataWizard {
         if(data == null) return null;
 
         String[] weekStrs = cropWeek(cropTable(data));
-        Week[] weeks = new Week[weekStrs.length];
-        for(int i=0; i<weeks.length; i++) {
-            String weekStr = weekStrs[i];
-            weeks[i] = new Week();
+        ArrayList<Week> weeks = new ArrayList<>();
+        for (String weekStr : weekStrs) {
+            //if no week number is present -> somehow the timetable is bugged, ignore this week
+            if (weekStr.contains("<A name=S")) {
+                Week week = new Week();
 
-            //week number
-            String wnstr = weekStr.substring(weekStr.indexOf("<A name=S") + "<A name=S".length(), weekStr.indexOf(">S"));
-            weeks[i].setWeek(Integer.parseInt(wnstr));
+                //week number
+                String wnstr = weekStr.substring(weekStr.indexOf("<A name=S") + "<A name=S".length(), weekStr.indexOf(">S"));
+                week.setWeek(Integer.parseInt(wnstr));
 
-            //days
-            Day[] days = new Day[Week.NUMBER_DAYS];
-            for(int j=0; j<days.length; j++) {
-                //day string
-                String str = StringWizard.getDayString(weeks[i].getWeek(), j);
-                days[j] = new Day(str);
+                //days
+                Day[] days = new Day[Week.NUMBER_DAYS];
+                for (int j = 0; j < days.length; j++) {
+                    //day string
+                    String str = StringWizard.getDayString(week.getWeek(), j);
+                    days[j] = new Day(str);
 
-                //lessons
-                days[j].setLessons(cropLesson(cropDay(weekStr)[j + 1]));
+                    //lessons
+                    days[j].setLessons(cropLesson(cropDay(weekStr)[j + 1]));
+                }
+                week.setDays(days);
+
+                weeks.add(week);
             }
-            weeks[i].setDays(days);
         }
-        return weeks;
+        //transform ArrayList in primitive array and send it
+        return weeks.toArray(new Week[weeks.size()]);
     }
 }
