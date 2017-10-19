@@ -30,6 +30,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //set the layout
 
+        //erase all preference when user launch this version for the first time
+        //I'm not proud of this, this will be deleted for the next version (current : 1.1.1, code 3)
+        SharedPreferences preftemp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        if(preftemp.getBoolean("firstRunCode3", true)){
+            preftemp.edit().clear().apply();
+            preftemp.edit().putBoolean("firstRunCode3", false).apply();
+        }
+
         //spinner to control group selection
         Spinner groupSpinner = (Spinner) findViewById(R.id.timeSpinner);
         assert groupSpinner != null;
