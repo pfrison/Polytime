@@ -3,6 +3,7 @@ package pfrison.me.polytime.exceptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -30,8 +31,15 @@ public class FireDialog extends AppCompatActivity {
 
         //prepare the dialog
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(Html.fromHtml(title));
-        alertDialog.setMessage(Html.fromHtml(message));
+        //title
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) //noinspection deprecation
+            alertDialog.setTitle(Html.fromHtml(title));
+        else alertDialog.setTitle(Html.fromHtml(title, Html.FROM_HTML_MODE_LEGACY));
+        //message
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) //noinspection deprecation
+            alertDialog.setMessage(Html.fromHtml(message));
+        else alertDialog.setMessage(Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY));
+        //buttons
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.neutralErrorDialogAction),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
