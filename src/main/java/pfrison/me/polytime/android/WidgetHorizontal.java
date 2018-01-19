@@ -12,6 +12,8 @@ import android.widget.RemoteViews;
 import pfrison.me.polytime.R;
 import pfrison.me.polytime.objects.Week;
 import pfrison.me.polytime.util.DataWizard;
+import pfrison.me.polytime.util.SaveWeekWizard;
+import pfrison.me.polytime.util.TimeTableWizardActivity;
 import pfrison.me.polytime.util.TimeTableWizardWidget;
 
 public class WidgetHorizontal extends AppWidgetProvider {
@@ -25,21 +27,19 @@ public class WidgetHorizontal extends AppWidgetProvider {
     }
 
     //used to download the table asynchronously while a save is restored.
-    class DownloadWeekAsync extends AsyncTask<Void, Void, Week[]> {
-        private int groupTP;
-        private Context context;
-        private AppWidgetManager widgetManager;
+    class DownloadWeekAsync extends AsyncTask<Void, Void, Void> {
+        private final Context context;
+        private final AppWidgetManager widgetManager;
 
         public DownloadWeekAsync(Context context, AppWidgetManager widgetManager){
             this.context = context;
             this.widgetManager = widgetManager;
-            groupTP = PreferenceManager.getDefaultSharedPreferences(context).getInt("group", 0) + 1;
         }
 
         @Override
-        protected Week[] doInBackground(Void... v) {
+        protected Void doInBackground(Void... v) {
             //download
-            return DataWizard.getWeeks(groupTP, context, PreferenceManager.getDefaultSharedPreferences(context));
+            return DataWizard.downloadWeeks(context, PreferenceManager.getDefaultSharedPreferences(context));
         }
 
         @Override
@@ -48,9 +48,9 @@ public class WidgetHorizontal extends AppWidgetProvider {
 
             //save restored in wait of the updated data
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-            TimeTableWizardWidget.weeks = DataWizard.getSavedWeeks(groupTP, pref);
+            TimeTableWizardWidget.week = SaveWeekWizard.loadWeek(pref);
             //restore save if we have one
-            if(TimeTableWizardWidget.weeks != null) TimeTableWizardWidget.displayTable(context);
+            if(TimeTableWizardWidget.week != null) TimeTableWizardWidget.displayTable(context);
             //tell the user that we downloading the table
             else TimeTableWizardWidget.displayText(context.getResources().getString(R.string.downloading));
 
@@ -58,16 +58,20 @@ public class WidgetHorizontal extends AppWidgetProvider {
             widgetManager.updateAppWidget(new ComponentName(context, WidgetHorizontal.class), TimeTableWizardWidget.remoteViews);
         }
 
-        protected void onPostExecute(Week[] week) {
+        protected void onPostExecute(Void v) {
+            //set the looked week to the closest one
+            TimeTableWizardActivity.setDefaultLookedWeek(PreferenceManager.getDefaultSharedPreferences(context));
+
+            Week week = SaveWeekWizard.loadWeek(PreferenceManager.getDefaultSharedPreferences(context));
             if(week == null){
                 //connection fail
-                if(TimeTableWizardWidget.weeks == null){
+                if(TimeTableWizardWidget.week == null){
                     //no save
                     TimeTableWizardWidget.displayText(context.getResources().getString(R.string.connexionFail));
                 }
             }else{
                 //apply change in activity
-                TimeTableWizardWidget.weeks = week;
+                TimeTableWizardWidget.week = week;
                 TimeTableWizardWidget.displayTable(context);
             }
 
