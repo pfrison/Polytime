@@ -3,6 +3,7 @@ Changelog :
 
 Indev (code4) :
  - Refonte du système de sauvegarde. Chaque semaine est sauvegardé dans un fichier unique pour alléger le temps de traitement.
+ - L'application affiche maintenant l'emploi du temps du semestre 6 (l'adresse de l'emploi du temps est dans InternetRequests#getRawData).
 
 v 1.1.1 (code 3) :
  - Correction expresse d'un bug causant un crash pour les emploi du temps TP3 et TP4.
