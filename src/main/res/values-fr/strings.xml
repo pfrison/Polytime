@@ -10,6 +10,8 @@
     <string name="arrow_current">Actuelle</string>
     <string name="arrow_text">Selection de la semaine :</string>
     <string name="connexionFail">Aucune connexion !\nAucune sauvegarde enregistrée !</string>
+    <string name="readFail">Erreur de lecture !\nAucune sauvegarde enregistrée !</string>
+    <string name="unknowFail">Erreur inconnue !\nAucune sauvegarde enregistrée !</string>
     <string name="day1">Lun.</string>
     <string name="day2">Mar.</string>
     <string name="day3">Mer.</string>
@@ -18,12 +20,12 @@
     <string name="day6">Sam.</string>
     <string name="day7">Dim.</string>
     <string name="downloading">Téléchargement…</string>
-    <string name="fatalFailMessage" formatted="false"><![CDATA[Une erreur inconnue à fait planté %s !<br/>
+    <string name="fatalFailMessage">Une erreur inconnue à fait planté %1$s !<br/>
         Si l\'erreur empêche le démarrage, essayez d\'effacer les préférences.<br/>
         StackTrace de l\'erreur :<br/>
         <br/>
-        <small><small>%s</small></small>]]>
-    </string><string name="fatalFailTitle">Erreur fatale</string>
+        <small><small>%2$s</small></small></string>
+    <string name="fatalFailTitle">Erreur fatale</string>
     <string name="neutralErrorDialogAction">OK</string>
     <string name="positiveErrorDialogAction">EFFACER LES PREFERENCES</string>
     <string name="time_text">Emploi du temps :</string>
