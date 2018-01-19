@@ -18,6 +18,8 @@
     <string name="arrow_current">Current</string>
     <string name="arrow_text">Week selection:</string>
     <string name="connexionFail">No connection!\nNo offline save!</string>
+    <string name="readFail">Error while reading!\nNo offline save!</string>
+    <string name="unknowFail">Unknow error!\nNo offline save!</string>
     <string name="day1">Mon.</string>
     <string name="day2">Tue.</string>
     <string name="day3">Wed.</string>
@@ -26,11 +28,11 @@
     <string name="day6">Sat.</string>
     <string name="day7">Sun.</string>
     <string name="downloading">Downloading…</string>
-    <string name="fatalFailMessage" formatted="false"><![CDATA[%s crashed because of an unknow error!<br/>
+    <string name="fatalFailMessage">%1$s crashed because of an unknow error!<br/>
         If the error prevent the application from starting, try to erase preferences.<br/>
         Error StackTrace:<br/>
         <br/>
-        <small><small>%s</small></small>]]></string>
+        <small><small>%2$s</small></small></string>
     <string name="fatalFailTitle">Fatal error</string>
     <string name="neutralErrorDialogAction">OK</string>
     <string name="positiveErrorDialogAction">ERASE PREFERENCES</string>
