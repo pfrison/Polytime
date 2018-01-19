@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/widget_vertical_layout"
+    android:minHeight="120dp"
+    android:minWidth="60dp"
+    android:updatePeriodMillis="18000000"
+    android:previewImage="@drawable/vertical_widget_preview"
+    android:resizeMode="vertical|horizontal" >
+
+    <!-- 18000000 ms = 5 hour -> widget refresh every 5 hours -->
+
+</appwidget-provider>
