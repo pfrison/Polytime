@@ -11,19 +11,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import pfrison.me.polytime.android.MainActivity;
+
 /**
  * Contain all methods we need to dialog with the server.
  */
 public class InternetRequests {
+	public static boolean connectionFail = false;
 
 	/**
 	 * Return the raw response from the server. Or null if the server is unreachable.
-	 * @param groupeTP the group TP selected
 	 * @param context the context
 	 * @param pref the user preference
 	 * @return a {@link String} containing the response. Or null if no connexion
      */
-	public static String getRawData(int groupeTP, Context context, SharedPreferences pref){
+	public static String getRawData(Context context, SharedPreferences pref){
+        connectionFail = false;
+		int groupeTP = pref.getInt(MainActivity.GROUP_TP_KEY, 0);
 		String data = "";
 
 		//try connection
@@ -35,17 +39,19 @@ public class InternetRequests {
 		if(netInfo == null || !netInfo.isConnectedOrConnecting()){
             //no connection
 			//save exist ?
+            connectionFail = true;
 			return null;
-		}
+        }
 
 		try {
-			URL url = new URL("http://dptima3.polytech-lille.net/" + StringWizard.getPageString(groupeTP));
+			URL url = new URL("http://dptima3.polytech-lille.net/EdTS6/" + StringWizard.getPageString(groupeTP));
 			connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(2000); //2 seconds timeout (max wait for a connection)
-            connection.setReadTimeout(4000); //4 seconds timeout (max wait to the end of the response)
+            connection.setReadTimeout(4000); //4 seconds timeout (max wait to the end for the response)
 			connection.connect();
 		} catch (IOException e) {
 			//connection failed
+            connectionFail = true;
 			return null;
 		}
 		
@@ -57,6 +63,7 @@ public class InternetRequests {
 			in.close();
 		} catch (IOException e) {
             //read failled
+            connectionFail = true;
             return null;
 		}
 		//encode data to UTF
@@ -69,14 +76,4 @@ public class InternetRequests {
 
 		return data;
 	}
-
-    /**
-     * Return the saved raw data. Or null if there is no save.
-     * @param groupeTP the group TP selected
-     * @param pref the user preference
-     * @return a {@link String} containing the save. Or null if there is no save.
-     */
-    public static String getSavedData(int groupeTP, SharedPreferences pref){
-        return pref.getString("rawDataSave" + String.valueOf(groupeTP), null);
-    }
 }

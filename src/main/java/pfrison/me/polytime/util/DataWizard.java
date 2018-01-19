@@ -2,9 +2,11 @@ package pfrison.me.polytime.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.ArrayList;
 
+import pfrison.me.polytime.android.MainActivity;
 import pfrison.me.polytime.objects.Day;
 import pfrison.me.polytime.objects.Lesson;
 import pfrison.me.polytime.objects.Week;
@@ -13,12 +15,14 @@ import pfrison.me.polytime.objects.Week;
  * Contain all methods we need to demand and format data
  */
 public class DataWizard {
+    public static boolean readFail = false;
+
     /**
      * Crop the raw server response {@literal <HTML></HTML>} to the second table {@literal <TABLE></TABLE>}
      * @param raw the raw server response containing two {@literal <TABLE></TABLE>} tags
      * @return {@literal <TABLE>the table data here</TABLE>}
      */
-	public static String cropTable(String raw) {
+	private static String cropTable(String raw) {
 		String tableStr = "";
 
 		//line crop
@@ -39,7 +43,7 @@ public class DataWizard {
      * @param tableStr the table string containing multiple {@literal <TR></TR>} tags
      * @return {@literal <TR>a day</TR>} (x7)
      */
-	public static String[] cropWeek(String tableStr) {
+	private static String[] cropWeek(String tableStr) {
 		int numberOfWeeks = (int) (((double) tableStr.split("<TR align=center>").length) / 7d);
 
 		//correction of a bug in the table "langue 2 (voir affichage)" misplaced
@@ -76,7 +80,7 @@ public class DataWizard {
      * @param weekStr the week string containing 7 {@literal <TR></TR>} tags
      * @return {@literal <TR>a day</TR>}
      */
-	public static String[] cropDay(String weekStr) {
+	private static String[] cropDay(String weekStr) {
 		String[] dayStrs = new String[Week.NUMBER_DAYS +1];
 		for(int i=0; i<dayStrs.length - 1; i++) {
 			dayStrs[i] = weekStr.substring(0, weekStr.indexOf("<TR align=center>", 1));
@@ -91,7 +95,7 @@ public class DataWizard {
      * @param dayStr the day string containing 4 {@literal <TD></TD>} tags
      * @return a list of 4 lessons
      */
-	public static Lesson[] cropLesson(String dayStr) {
+	private static Lesson[] cropLesson(String dayStr) {
 		Lesson[] lessons = new Lesson[Day.NUMBER_LESSONS];
 
 		//remove TR
@@ -149,84 +153,53 @@ public class DataWizard {
 
     /**
      * Used to get (download + format data) weeks for the server
-     * @param groupTP the group TD selected
      * @param context the context
      * @param pref the suer preference
      * @return a list of Week
      */
-	public static Week[] getWeeks(int groupTP, Context context, SharedPreferences pref){
+	public static Void downloadWeeks(Context context, SharedPreferences pref){
+        readFail = false;
         //download data
-		String data = InternetRequests.getRawData(groupTP, context, pref);
-        if(data == null) return null; //return null if data is null (no connexion)
+		String data = InternetRequests.getRawData(context, pref);
+        if(data == null) return null; //ignore if data is null (no connexion)
 
-        //extract and organize info contained in data
-        String[] weekStrs = cropWeek(cropTable(data));
-        ArrayList<Week> weeks = new ArrayList<>();
-        for (String weekStr : weekStrs) {
-            //if no week number is present -> somehow the timetable is bugged, ignore this week
-            if (weekStr.contains("<A name=S")) {
-                Week week = new Week();
+        try{
+            //extract and organize info contained in data
+            String[] weekStrs = cropWeek(cropTable(data));
+            ArrayList<Week> weeks = new ArrayList<>();
+            for (String weekStr : weekStrs) {
+                //if no week number is present -> somehow the timetable is bugged, ignore this week
+                if (weekStr.contains("<A name=S")) {
+                    Week week = new Week();
 
-                //week number
-                String wnstr = weekStr.substring(weekStr.indexOf("<A name=S") + "<A name=S".length(), weekStr.indexOf(">S"));
-                week.setWeek(Integer.parseInt(wnstr));
+                    //week number
+                    String wnstr = weekStr.substring(weekStr.indexOf("<A name=S") + "<A name=S".length(), weekStr.indexOf(">S"));
+                    week.setWeek(Integer.parseInt(wnstr));
 
-                //days
-                Day[] days = new Day[Week.NUMBER_DAYS];
-                for(int j=0; j<days.length; j++) {
-                    //day string
-                    String str = StringWizard.getDayString(week.getWeek(), j);
-                    days[j] = new Day(str);
+                    //days
+                    Day[] days = new Day[Week.NUMBER_DAYS];
+                    for(int j=0; j<days.length; j++) {
+                        //day string
+                        String str = StringWizard.getDayString(week.getWeek(), j);
+                        //lessons
+                        Lesson[] lessons = cropLesson(cropDay(weekStr)[j + 1]);
+                        //add the day
+                        days[j] = new Day(str, lessons);
+                    }
+                    week.setDays(days);
 
-                    //lessons
-                    days[j].setLessons(cropLesson(cropDay(weekStr)[j + 1]));
+                    weeks.add(week);
                 }
-                week.setDays(days);
-
-                weeks.add(week);
             }
+            //transform ArrayList in primitive array
+            Week[] weeksArray = weeks.toArray(new Week[weeks.size()]);
+
+            //save weeks and send the result
+            SaveWeekWizard.saveWeeks(weeksArray, pref);
+        }catch (Exception e){
+            e.printStackTrace();
+            readFail = true;
         }
-        //transform ArrayList in primitive array and send it
-        return weeks.toArray(new Week[weeks.size()]);
-    }
-
-    /**
-     * searsh in user preference if a save exist then return it after formatted it
-     * @param groupeTP the group TP selected
-     * @param pref the user preference
-     * @return a list of Week
-     */
-    public static Week[] getSavedWeeks(int groupeTP, SharedPreferences pref){
-        String data = InternetRequests.getSavedData(groupeTP, pref);
-        if(data == null) return null;
-
-        String[] weekStrs = cropWeek(cropTable(data));
-        ArrayList<Week> weeks = new ArrayList<>();
-        for (String weekStr : weekStrs) {
-            //if no week number is present -> somehow the timetable is bugged, ignore this week
-            if (weekStr.contains("<A name=S")) {
-                Week week = new Week();
-
-                //week number
-                String wnstr = weekStr.substring(weekStr.indexOf("<A name=S") + "<A name=S".length(), weekStr.indexOf(">S"));
-                week.setWeek(Integer.parseInt(wnstr));
-
-                //days
-                Day[] days = new Day[Week.NUMBER_DAYS];
-                for (int j = 0; j < days.length; j++) {
-                    //day string
-                    String str = StringWizard.getDayString(week.getWeek(), j);
-                    days[j] = new Day(str);
-
-                    //lessons
-                    days[j].setLessons(cropLesson(cropDay(weekStr)[j + 1]));
-                }
-                week.setDays(days);
-
-                weeks.add(week);
-            }
-        }
-        //transform ArrayList in primitive array and send it
-        return weeks.toArray(new Week[weeks.size()]);
+        return null; //because of the "Void" type (and not "void")
     }
 }

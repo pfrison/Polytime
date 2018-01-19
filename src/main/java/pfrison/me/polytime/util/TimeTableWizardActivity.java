@@ -2,10 +2,12 @@ package pfrison.me.polytime.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Html;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -27,8 +29,8 @@ import pfrison.me.polytime.objects.Week;
  */
 public class TimeTableWizardActivity {
     private static FrameLayout timeTableLayout;
-    private static int lookedWeek = -1;
-    public static Week[] weeks;
+    public static int lookedWeek = -1;
+    public static boolean tableDiplayed = false;
 
     public static void displayText(Context context, String text){
         if(timeTableLayout == null)
@@ -56,25 +58,14 @@ public class TimeTableWizardActivity {
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         //add the TextView to the place
         timeTableLayout.addView(textView);
+
+        tableDiplayed = false;
     }
 
-    public static void displayTable(Context context) {
+    public static void displayTable(Context context, Week week) {
         if (timeTableLayout == null)
             throw new RuntimeException("The Widget is not loaded yet and/or you didn't called generateSpace(Activity).");
-        if (weeks == null) return; //Weeks = null ? -> not downloaded yet.
-
-        //if lookedWeek don't exist in week, set to default
-        if(!isLookedWeekExist()) setDefaultLookedWeek();
-
-        //find the selected week
-        Week week = null;
-        for(Week w : weeks){
-            if(w.getWeek() == lookedWeek){
-                week = w;
-                break;
-            }
-        }
-        assert week != null;
+        if (week == null) return; //Week = null ? -> not downloaded yet.
 
         //should we refresh or build the table ? (a table is already present ?)
         View[] childs = new View[timeTableLayout.getChildCount()];
@@ -271,6 +262,7 @@ public class TimeTableWizardActivity {
                 }
             }
         }
+        tableDiplayed = true;
     }
 
     public static void generateSpace(Activity mainAct){
@@ -328,60 +320,23 @@ public class TimeTableWizardActivity {
         return -1;
     }
 
-    public static void setDefaultLookedWeek(){
-        if(weeks == null) return;
-
+    /** To find the nearest week available */
+    public static void setDefaultLookedWeek(SharedPreferences pref){
         int currentWeek = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
-        //get the next closest week
-        int min = Integer.MAX_VALUE;
-        for(Week w : weeks){
-            //if exact value min = 0 -> this is the closest
-            if(w.getWeek() == currentWeek){
-                lookedWeek = currentWeek;
+        for(int add = 0; add < 10; add++){
+            int added = (currentWeek + add) % 53; //53 = number of weeks in a year (it's a maximum. Real number is 52,1429 weeks per year)
+            if(SaveWeekWizard.isWeekAvailable(pref, added)){
+                lookedWeek = added;
                 return;
             }
-            //keep track of the next closest week
-            if(w.getWeek() - currentWeek >= 0 //we want min >= 0 (aka the next closest week)
-                    && w.getWeek() - currentWeek < min){
-                min = w.getWeek() - currentWeek;
-            }
-        }
-        lookedWeek = currentWeek + min;
-    }
-
-    public static void minusLookedWeek(){
-        if(weeks == null) return;
-
-        for(Week week : weeks) {
-            if(week.getWeek() == lookedWeek - 1) {
-                //available
-                lookedWeek--;
-                break;
-            }
         }
     }
 
-    public static void plusLookedWeek(){
-        if(weeks == null) return;
-
-        for(Week week : weeks) {
-            if(week.getWeek() == lookedWeek + 1) {
-                //available
-                lookedWeek++;
-                break;
-            }
-        }
+    public static void minusLookedWeek(SharedPreferences pref){
+        if(SaveWeekWizard.isWeekAvailable(pref, lookedWeek - 1)) lookedWeek--;
     }
 
-    private static boolean isLookedWeekExist(){
-        //not initialized
-        if(lookedWeek == -1) return false;
-
-        for(Week w : weeks){
-            if(w.getWeek() == lookedWeek){
-                return true;
-            }
-        }
-        return false;
+    public static void plusLookedWeek(SharedPreferences pref){
+        if(SaveWeekWizard.isWeekAvailable(pref, lookedWeek + 1)) lookedWeek++;
     }
 }

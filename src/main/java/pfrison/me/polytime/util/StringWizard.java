@@ -28,13 +28,13 @@ public class StringWizard {
 	
 	public static String getPageString(int TP) {
 		switch (TP) {
-		case 1:
+		case 0:
 			return "groupe11.html";
-		case 2:
+		case 1:
 			return "groupe12.html";
-		case 3:
+		case 2:
 			return "groupe23.html";
-		case 4:
+		case 3:
 			return "groupe24.html";
 		}
 		throw new IllegalArgumentException("TP groupe should be only 1, 2, 3 or 4 (" + String.valueOf(TP) + ").");
