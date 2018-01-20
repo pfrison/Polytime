@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main); //set the layout
 
         //erase all preference when user launch this version for the first time
-        //This will be deleted for the next version (current : 1.1.2, code 4)
+        //This will be deleted for the next version (current : 1.1.2 , code 4)
         SharedPreferences preftemp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         if(preftemp.getBoolean("firstRunCode4", true)){
             preftemp.edit().clear().apply();
@@ -136,6 +135,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
+        //set the looked week to the closest one
+        TimeTableWizardActivity.setDefaultLookedWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
 
         //restore a save (if exist) or display a loading text while downloading the table for the first time that the activity is opened
         new DownloadWeekAsync().execute();
