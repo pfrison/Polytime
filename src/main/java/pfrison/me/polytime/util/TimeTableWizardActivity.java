@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Html;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -104,28 +103,26 @@ public class TimeTableWizardActivity {
                     }
 
                     //highlight the current day and the current lesson and unhighlight the rest
-                    if(week.getWeek() == Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)){
+                    //-1 because sunday is the first day AND -1 because sunday = 1 BUT +1 because of hour display
+                    int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
+                    int lesson = getCurrentLesson(context) + 1; //+1 because of day display
+                    if(i == day && i != 0 && j != 0){
                         //highlight
-                        //-1 because sunday is the first day AND -1 because sunday = 1 BUT +1 because of hour display
-                        int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
-                        int lesson = getCurrentLesson(context) + 1; //+1 because of day display
-                        if(i == day && i != 0 && j != 0){
-                            if(j == lesson){
-                                //set a custom background (highlight current lesson we are in)
-                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) //noinspection deprecation
-                                    textView.setBackground(context.getResources().getDrawable(R.drawable.time_table_background_current_lesson));
-                                else textView.setBackground(context.getResources().getDrawable(R.drawable.time_table_background_current_lesson, null));
-                            }else{
-                                //set a custom background (highlight current day we are in)
-                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) //noinspection deprecation
-                                    textView.setBackground(context.getResources().getDrawable(R.drawable.time_table_background_current_day));
-                                else textView.setBackground(context.getResources().getDrawable(R.drawable.time_table_background_current_day, null));
-                            }
+                        if(j == lesson){
+                            //set a custom background (highlight current lesson we are in)
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) //noinspection deprecation
+                                textView.setBackground(context.getResources().getDrawable(R.drawable.time_table_background_current_lesson));
+                            else textView.setBackground(context.getResources().getDrawable(R.drawable.time_table_background_current_lesson, null));
+                        }else{
+                            //set a custom background (highlight current day we are in)
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) //noinspection deprecation
+                                textView.setBackground(context.getResources().getDrawable(R.drawable.time_table_background_current_day));
+                            else textView.setBackground(context.getResources().getDrawable(R.drawable.time_table_background_current_day, null));
                         }
-                    }else{
+                    } else {
                         //unhighlight
                         //only lessons (not hour and day display)
-                        if(i != 0 && j != 0) {
+                        if (i != 0 && j != 0) {
                             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) //noinspection deprecation
                                 textView.setBackground(context.getResources().getDrawable(R.drawable.time_table_border));
                             else
