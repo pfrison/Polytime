@@ -1,7 +1,9 @@
 Changelog :
 
+Master (1.1.2 code 5 et 6) :
+ - Corrections mineures
 
-v 1.1.2 (code4 & 5) :
+v 1.1.2 (code4) :
  - Refonte du système de sauvegarde. Chaque semaine est sauvegardé dans un fichier unique pour alléger le temps de traitement.
  - L'application affiche maintenant l'emploi du temps du semestre 6 (l'adresse de l'emploi du temps est dans InternetRequests#getRawData).
  - Changement de license : la nouvelle license est "CC0 1.0 - Public Domain Dedication". Le changement de license prend effet à partir de cette version.
