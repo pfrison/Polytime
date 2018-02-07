@@ -169,7 +169,8 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(Void v) {
             //set the looked week to the closest one
-            TimeTableWizardActivity.setDefaultLookedWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
+            if(TimeTableWizardActivity.lookedWeek == -1)
+                TimeTableWizardActivity.setDefaultLookedWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
 
             Week week = SaveWeekWizard.loadWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
             if(week == null){
