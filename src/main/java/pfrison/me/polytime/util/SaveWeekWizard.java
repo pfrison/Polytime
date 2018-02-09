@@ -1,7 +1,6 @@
 package pfrison.me.polytime.util;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

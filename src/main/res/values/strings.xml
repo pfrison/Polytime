@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name" translatable="false">Polytime</string>
-    <string name="main_activity_title" translatable="false">Polytime</string>
+    <string name="app_name">Polytime</string>
+    <string name="main_activity_title">Polytime</string>
     <string name="arrow_prev" translatable="false">&lt;&lt;</string> <!-- will look like : << -->
     <string name="arrow_next" translatable="false">&gt;&gt;</string> <!-- will look like : >> -->
     <string name="hour1" translatable="false">08h00\n10h00</string>
@@ -37,7 +37,7 @@
     <string name="neutralErrorDialogAction">OK</string>
     <string name="positiveErrorDialogAction">ERASE PREFERENCES</string>
     <string name="time_text">Time table:</string>
-    <string name="update">Update…</string>
+    <string name="update">Updating…</string>
 
     <string name="widgetHorizontal">Horizontal</string>
     <string name="widgetVertical">Vertical</string>

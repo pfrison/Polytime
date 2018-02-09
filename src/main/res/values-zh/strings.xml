@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="arrow_current">当前</string>
+    <string name="arrow_text">星期:</string>
+    <string name="connexionFail">无法连接！\n没有信息！</string>
+    <string name="day1">星期一</string>
+    <string name="day2">星期二</string>
+    <string name="day3">星期三</string>
+    <string name="day4">星期四</string>
+    <string name="day5">星期五</string>
+    <string name="day6">星期六</string>
+    <string name="day7">星期日</string>
+    <string name="downloading">下载中…</string>
+    <string name="fatalFailMessage">未知错误 (%1$s) ！<br/>
+        如果程序运行失败，请尝试删除数据！<br/>
+        堆栈跟踪:<br/>
+        <br/>
+        <small><small>%2$s</small></small></string>
+    <string name="fatalFailTitle">严重错误</string>
+    <string name="neutralErrorDialogAction">好</string>
+    <string name="positiveErrorDialogAction">删除数据</string>
+    <string name="readFail">读取失败！\n没有信息！</string>
+    <string name="time_text">时间表:</string>
+    <string name="unknowFail">未知错误！\n没有信息！</string>
+    <string name="update">刷新…</string>
+    <string name="app_name">Poly-时刻</string>
+    <string name="widgetHorizontal">水平</string>
+    <string name="widgetVertical">竖直</string>
+    <string name="main_activity_title">Poly-时刻</string>
+
+    <string-array name="time_spinner">
+        <item>TD1 TP1 组</item>
+        <item>TD1 TP2 组</item>
+        <item>TD2 TP3 组</item>
+        <item>TD2 TP4 组</item>
+    </string-array>
+</resources>

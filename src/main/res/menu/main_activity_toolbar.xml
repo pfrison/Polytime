@@ -5,5 +5,5 @@
         android:id="@+id/dlicon"
         android:icon="@android:color/transparent"
         android:title="@string/update"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 </menu>

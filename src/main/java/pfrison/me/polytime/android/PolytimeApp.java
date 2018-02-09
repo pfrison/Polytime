@@ -3,7 +3,6 @@ package pfrison.me.polytime.android;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

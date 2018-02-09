@@ -32,4 +32,6 @@
     <string name="update">Actualisation…</string>
     <string name="widgetHorizontal">Horizontal</string>
     <string name="widgetVertical">Vertical</string>
+    <string name="app_name">Polytime</string>
+    <string name="main_activity_title">Polytime</string>
 </resources>

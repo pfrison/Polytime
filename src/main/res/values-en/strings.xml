@@ -29,7 +29,9 @@
     <string name="neutralErrorDialogAction">OK</string>
     <string name="positiveErrorDialogAction">ERASE PREFERENCES</string>
     <string name="time_text">Time table:</string>
-    <string name="update">Update…</string>
+    <string name="update">Updating…</string>
     <string name="widgetHorizontal">Horizontal</string>
     <string name="widgetVertical">Vertical</string>
+    <string name="app_name">Polytime</string>
+    <string name="main_activity_title">Polytime</string>
 </resources>

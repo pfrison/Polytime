@@ -2,11 +2,9 @@ package pfrison.me.polytime.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.util.ArrayList;
 
-import pfrison.me.polytime.android.MainActivity;
 import pfrison.me.polytime.objects.Day;
 import pfrison.me.polytime.objects.Lesson;
 import pfrison.me.polytime.objects.Week;
