@@ -19,6 +19,8 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import pfrison.me.polytime.R;
+import pfrison.me.polytime.android.Animations;
+import pfrison.me.polytime.android.MainActivity;
 import pfrison.me.polytime.objects.Day;
 import pfrison.me.polytime.objects.Week;
 
@@ -27,12 +29,11 @@ import pfrison.me.polytime.objects.Week;
  * All variables and methods are static because we only have one timetable to display
  */
 public class TimeTableWizardActivity {
-    private static FrameLayout timeTableLayout;
     public static int lookedWeek = -1;
     public static boolean tableDiplayed = false;
 
     public static void displayText(Context context, String text){
-        if(timeTableLayout == null)
+        if(MainActivity.timeTableLayout == null)
             throw new RuntimeException("The activity is not loaded yet and/or you don't " +
                     "called getHeightAfterLoad(Activity) in the \"onCreate(Bundle)\" method.");
         //empty the place
@@ -56,20 +57,20 @@ public class TimeTableWizardActivity {
         //make it bold
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         //add the TextView to the place
-        timeTableLayout.addView(textView);
+        MainActivity.timeTableLayout.addView(textView);
 
         tableDiplayed = false;
     }
 
     public static void displayTable(Context context, Week week) {
-        if (timeTableLayout == null)
+        if (MainActivity.timeTableLayout == null)
             throw new RuntimeException("The Widget is not loaded yet and/or you didn't called generateSpace(Activity).");
         if (week == null) return; //Week = null ? -> not downloaded yet.
 
         //should we refresh or build the table ? (a table is already present ?)
-        View[] childs = new View[timeTableLayout.getChildCount()];
-        for(int i = 0; i < timeTableLayout.getChildCount(); i++) {
-            childs[i] = timeTableLayout.getChildAt(i);
+        View[] childs = new View[MainActivity.timeTableLayout.getChildCount()];
+        for(int i = 0; i < MainActivity.timeTableLayout.getChildCount(); i++) {
+            childs[i] = MainActivity.timeTableLayout.getChildAt(i);
         }
         if(childs.length != 0 && childs[0] instanceof HorizontalScrollView){
             //a table is already present -> update it
@@ -150,7 +151,7 @@ public class TimeTableWizardActivity {
                     FrameLayout.LayoutParams.MATCH_PARENT,
                     FrameLayout.LayoutParams.MATCH_PARENT));
             //add it to the place
-            timeTableLayout.addView(scrollView);
+            MainActivity.timeTableLayout.addView(scrollView);
 
             //create a LinearLayout for all LinearLayout for columns
             LinearLayout horizontalLayout = new LinearLayout(context);
@@ -287,30 +288,30 @@ public class TimeTableWizardActivity {
 
     public static void generateSpace(Activity mainAct){
         //create timeTableLayout and set LayoutParams
-        timeTableLayout = new FrameLayout(mainAct);
+        MainActivity.timeTableLayout = new FrameLayout(mainAct);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_END);
         params.addRule(RelativeLayout.ALIGN_PARENT_START);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        params.addRule(RelativeLayout.BELOW, R.id.sep2);
-        timeTableLayout.setLayoutParams(params);
+        params.addRule(RelativeLayout.BELOW, R.id.padding);
+        MainActivity.timeTableLayout.setLayoutParams(params);
 
         //add timeTableLayout to the rootLayout of MainActivity
         RelativeLayout rootLayout = mainAct.findViewById(R.id.rootLayout);
         assert rootLayout != null;
-        rootLayout.addView(timeTableLayout);
+        rootLayout.addView(MainActivity.timeTableLayout);
     }
 
     private static void emptySpace(){
-        if(timeTableLayout == null)
+        if(MainActivity.timeTableLayout == null)
             throw new RuntimeException("The activity is not loaded yet and/or you don't " +
                     "called getHeightAfterLoad(Activity) in the \"onCreate(Bundle)\" method.");
         //search for child and remove them
-        for(int i = 0; i < timeTableLayout.getChildCount(); i++) {
-            View child = timeTableLayout.getChildAt(i);
-            timeTableLayout.removeView(child);
+        for(int i = 0; i < MainActivity.timeTableLayout.getChildCount(); i++) {
+            View child = MainActivity.timeTableLayout.getChildAt(i);
+            MainActivity.timeTableLayout.removeView(child);
         }
     }
 

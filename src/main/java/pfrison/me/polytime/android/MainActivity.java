@@ -1,5 +1,6 @@
 package pfrison.me.polytime.android;
 
+import android.animation.Animator;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 
 import pfrison.me.polytime.R;
@@ -30,6 +32,7 @@ TODO list :
  */
 public class MainActivity extends AppCompatActivity {
     public static final String GROUP_TP_KEY = "group";
+    public static FrameLayout timeTableLayout;
     private MenuItem DLIcon;
 
     @Override
@@ -45,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
             preftemp.edit().putBoolean("firstRunCode4", false).apply();
         }
 
+        //buttons to control week selection
+        final Button prevButton = (Button) findViewById(R.id.arrowPrevButton);
+        final Button currentButton = (Button) findViewById(R.id.arrowCurrentButton);
+        final Button nextButton = (Button) findViewById(R.id.arrowNextButton);
+
         //spinner to control group selection
         Spinner groupSpinner = (Spinner) findViewById(R.id.timeSpinner);
         assert groupSpinner != null;
@@ -53,19 +61,41 @@ public class MainActivity extends AppCompatActivity {
         timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         groupSpinner.setAdapter(timeAdapter);
         //set the user preference for the group selection
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this); //get user preferences
+        final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this); //get user preferences
         groupSpinner.setSelection(pref.getInt(GROUP_TP_KEY, 0));
         //set the listener
         groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //save the selection
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
-                editor.putInt(GROUP_TP_KEY, position);
-                editor.apply();
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                if(pref.getInt(GROUP_TP_KEY, -1) != position){
+                    //save the selection
+                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
+                    editor.putInt(GROUP_TP_KEY, position);
+                    editor.apply();
 
-                //download time table
-                new DownloadWeekAsync().execute();
+                    //animate the fade out
+                    Animations.animateReturnDefaultFadeOut(timeTableLayout, new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            prevButton.setEnabled(false);
+                            currentButton.setEnabled(false);
+                            nextButton.setEnabled(false);
+                        }
+                        @Override
+                        public void onAnimationCancel(Animator animation) {}
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {}
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            //download time table
+                            new DownloadWeekAsync().execute();
+
+                            //animate the fade in
+                            Animations.animateReturnDefaultFadeIn(timeTableLayout, Animations.enableButtonsAtEnd(prevButton, currentButton, nextButton));
+                        }
+                    });
+                }
             }
 
             @Override
@@ -75,49 +105,104 @@ public class MainActivity extends AppCompatActivity {
 
         //buttons to control week selection
         //display previous week
-        Button prevButton = (Button) findViewById(R.id.arrowPrevButton);
         assert prevButton != null;
         //set listener
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //set to the previous week if exist
-                TimeTableWizardActivity.minusLookedWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
-                //redraw table
-                TimeTableWizardActivity.displayTable(getBaseContext(), SaveWeekWizard.loadWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext())));
+                //animate the fade out
+                Animations.animateLeftFadeOut(timeTableLayout, new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        prevButton.setEnabled(false);
+                        currentButton.setEnabled(false);
+                        nextButton.setEnabled(false);
+                    }
+                    @Override
+                    public void onAnimationCancel(Animator animation) {}
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {}
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        //set to the previous week if exist
+                        TimeTableWizardActivity.minusLookedWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
+                        //redraw table
+                        TimeTableWizardActivity.displayTable(getBaseContext(), SaveWeekWizard.loadWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext())));
+
+                        //animate the fade in
+                        Animations.animateLeftFadeIn(timeTableLayout, Animations.enableButtonsAtEnd(prevButton, currentButton, nextButton));
+                    }
+                });
             }
         });
 
         //display current week
-        Button currentButton = (Button) findViewById(R.id.arrowCurrentButton);
         assert currentButton != null;
         //set listener
         currentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //set to the next closest week
-                TimeTableWizardActivity.setDefaultLookedWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
-                //redraw table
-                TimeTableWizardActivity.displayTable(getBaseContext(), SaveWeekWizard.loadWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext())));
+                //animate the fade out
+                Animations.animateReturnDefaultFadeOut(timeTableLayout, new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        prevButton.setEnabled(false);
+                        currentButton.setEnabled(false);
+                        nextButton.setEnabled(false);
+                    }
+                    @Override
+                    public void onAnimationCancel(Animator animation) {}
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {}
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        //set to the next closest week
+                        TimeTableWizardActivity.setDefaultLookedWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
+                        //redraw table
+                        TimeTableWizardActivity.displayTable(getBaseContext(), SaveWeekWizard.loadWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext())));
+
+                        //animate the fade in
+                        Animations.animateReturnDefaultFadeIn(timeTableLayout, Animations.enableButtonsAtEnd(prevButton, currentButton, nextButton));
+                    }
+                });
             }
         });
 
         //display next week
-        Button nextButton = (Button) findViewById(R.id.arrowNextButton);
         assert nextButton != null;
         //set listener
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //set to the next week if exist
-                TimeTableWizardActivity.plusLookedWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
-                //redraw table
-                TimeTableWizardActivity.displayTable(getBaseContext(), SaveWeekWizard.loadWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext())));
+                //animate the fade out
+                Animations.animateRightFadeOut(timeTableLayout, new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        prevButton.setEnabled(false);
+                        currentButton.setEnabled(false);
+                        nextButton.setEnabled(false);
+                    }
+                    @Override
+                    public void onAnimationCancel(Animator animation) {}
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {}
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        //set to the next week if exist
+                        TimeTableWizardActivity.plusLookedWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext()));
+                        //redraw table
+                        TimeTableWizardActivity.displayTable(getBaseContext(), SaveWeekWizard.loadWeek(PreferenceManager.getDefaultSharedPreferences(getBaseContext())));
+
+                        //animate the fade in
+                        Animations.animateRightFadeIn(timeTableLayout, Animations.enableButtonsAtEnd(prevButton, currentButton, nextButton));
+                    }
+                });
             }
         });
 
         //generate the space to add the table or the loading/error text
         TimeTableWizardActivity.generateSpace(this);
+        Animations.animateOpening(MainActivity.timeTableLayout);
 
         //After the Activity creation, Android will jump to onCreateOptionsMenu(Menu)
     }
