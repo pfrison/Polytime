@@ -2,6 +2,7 @@ package pfrison.me.polytime.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -53,16 +54,32 @@ public class DataWizard {
 		for(int i=0; i<weekStrs.length; i++) {
 			int cropCursor = -1;
 			for(int trCount = 0; trCount < Week.NUMBER_DAYS + 2; trCount++) {
-				cropCursor = tableStr.indexOf("<TR align=center>", cropCursor + 1);
+                if(tableStr.indexOf("<TR align=center>", cropCursor + 1) != -1)
+				    cropCursor = tableStr.indexOf("<TR align=center>", cropCursor + 1);
 			}
 			weekStrs[i] = tableStr.substring(0, cropCursor);
 
-			//correction of a bug in the table "langue 2 (voir affichage)" misplaced
+			//fix for a bug in the table : "langue 2 (voir affichage)" misplaced
 			if(weekStrs[i].contains("<TR align=center><TD colspan=1>Langue 2 (voir affichage)<TD><TD><TD><TD></TR>")) {
 				int length = "<TR align=center><TD colspan=1>Langue 2 (voir affichage)<TD><TD><TD><TD></TR>".length();
 				cropCursor = tableStr.indexOf("<TR align=center>", cropCursor + 1);
 				weekStrs[i] = tableStr.substring(length, cropCursor);
 			}
+
+            //fix for a bug in the table : some lines can be inserted between two days
+            if(weekStrs[i].contains("<TR align=center><TD>")){
+                Log.d("datawiz", "fixing......");
+                Log.d("datawiz", weekStrs[i]);
+
+			    int start = tableStr.indexOf("<TR align=center><TD>");
+			    int end = start + tableStr.substring(start).indexOf("</TR>") + "</TR>".length();
+
+                if(tableStr.indexOf("<TR align=center>", cropCursor + 1) != -1)
+                    cropCursor = tableStr.indexOf("<TR align=center>", cropCursor + 1);
+
+                Log.d("datawiz", tableStr.substring(start, end));
+			    weekStrs[i] = tableStr.substring(0, start) + tableStr.substring(end, cropCursor);
+            }
 
 			tableStr = tableStr.substring(cropCursor);
 		}
